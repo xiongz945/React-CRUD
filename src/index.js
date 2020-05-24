@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Signin from './Signin'
+import App from './App'
 
 ReactDOM.render(
-    <Signin/>,
+    <App />,
     document.getElementById('root')
 )
