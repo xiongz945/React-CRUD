@@ -1,97 +1,73 @@
-import React, {useState} from 'react'
-import axios from 'axios'
-import { createStore } from 'redux'
-import { Provider, connect } from 'react-redux'
+import React from 'react'
 import {
     BrowserRouter as Router,
     Switch,
-    Route,
-    Link,
-    useHistory
+    Redirect,
+    Route
   } from 'react-router-dom';
-import Users from './Users'
+import { PrivateRoute } from './PrivateRoute'
+import { Users } from './Users'
+import { SigninPage } from './SigninPage'
+import { AddUser } from './AddUser'
+import { history } from './history'
 
-const initialState = {
-    email: '',
-    password: ''
-};
+// class App extends React.Component {
+//     render() {
+//         return (
+//             <Router>
+//                 <Switch>
+//                     <Route exact path='/'>
+//                         <SigninPage />
+//                     </Route>
+//                     <Route path='/users'>
+//                         <Users />
+//                     </Route>
+//                     <Route path='/edit'>
 
-function reducer(state=initialState, action) {
-    console.log('reducer', state, action);
-    return state;
+//                     </Route>
+//                     <Route path='/add'>
+
+//                     </Route>
+//                 </Switch>
+//             </Router>
+//         );
+//     }
+
+//     handleEmailChange(e){
+//         this.setState({email:e.target.value});
+//     }
+
+//     handlePasswordChange(e) {
+//         this.setState({password:e.target.value});
+//     }
+
+//     signIn(){
+//         axios.post('https://reqres.in/api/login', {
+//             "email": this.state.email,
+//             "password": this.state.password
+//         })
+//         .then((res) => {
+//             console.log(res);
+//         })
+//         .catch((err) => {
+//             console.log(err);
+//         });
+//     }
+// }
+
+function App() {
+    return (
+                    <Router history={history}>
+                        <Switch>
+                            <PrivateRoute path='/users' component={Users}>
+                            </PrivateRoute>                            
+                            <Route exact path='/signin' component={SigninPage}>
+                            </Route>
+                            <PrivateRoute exact path='/add' component={AddUser}>
+                            </PrivateRoute>
+                            <Redirect from="*" to="/signin" />
+                        </Switch>
+                    </Router>
+                );
 }
-
-const store = createStore(reducer);
-
-class App extends React.Component {
-    render() {
-        return (
-            <Router>
-                <Switch>
-                    <Route exact path='/'>
-                        <SigninPage />
-                    </Route>
-                    <Route path='/users'>
-                        <Users />
-                    </Route>
-                </Switch>
-            </Router>
-        );
-    }
-
-    handleEmailChange(e){
-        this.setState({email:e.target.value});
-    }
-
-    handlePasswordChange(e) {
-        this.setState({password:e.target.value});
-    }
-
-    signIn(){
-        axios.post('https://reqres.in/api/login', {
-            "email": this.state.email,
-            "password": this.state.password
-        })
-        .then((res) => {
-            console.log(res);
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-    }
-}
-
-function SigninPage () {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    let history = useHistory();
-
-    let signIn = () => {
-        axios.post('https://reqres.in/api/login', {
-            "email": email,
-            "password": password
-        })
-        .then((res) => {
-            console.log(res);
-            history.push('/users')
-        })
-        .catch((err) => {
-            console.log(err);
-        });
-    }
-
-
-    return <form className="form-signin">
-            <h2 className="form-signin-heading"> Please sign in </h2>
-            <label htmlFor="inputEmail" className="sr-only"> Email address
-            </label>
-            <input type="email" id="inputEmail" onChange={(e)=> setEmail(e.target.value)} className="form-control" placeholder="Email address" required autoFocus />
-            <label htmlFor="inputPassword" className="sr-only"> Password</label>
-            <input type="password" id="inputPassword" onChange={(e)=> setPassword(e.target.value)} className="form-control" placeholder="Password" required />
-            <button className="btn btn-lg btn-primary btn-block" onClick={signIn} type="button"> Sign in
-            </button>
-        </form>
-}
-
 export default App
