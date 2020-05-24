@@ -1,11 +1,10 @@
-import { authHeader } from './auth-header';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
 
 export const userService = {
     login,
     logout,
     getAll,
+    create,
     update,
     delete: _delete
 };
@@ -44,12 +43,22 @@ function getAll() {
            })
 }
 
+function create(user) {
+    return axios.post('https://reqres.in/api/users', {
+        "name": user.name,
+        "username": user.username,
+        "email": user.email,
+        "phone": user.phone
+    }).then(user => {
+        // localStorage.setItem('user', JSON.stringify(user));
+        return user;
+    }).catch(err => {
+        console.log(err);
+        throw err;
+    });
+}
+
 function update(user) {
-    const requestOptions = {
-        method: 'PUT',
-        headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify(user)
-    };
 
     // return fetch(`${config.apiUrl}/users/${user.id}`, requestOptions).then(handleResponse);;
 }
@@ -65,8 +74,4 @@ function _delete(id) {
             throw err;
         });
     // return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(handleResponse);
-}
-
-function handleResponse(response) {
-    return response.text();
 }

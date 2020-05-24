@@ -6,26 +6,17 @@ import {Link} from 'react-router-dom'
 
 function Users () {
     const users = useSelector(state => state.users);
-    // const user = useSelector(state => state.authencation.user);
     const dispatch = useDispatch();
-    // const [userInfo, setUserInfo] = useState([]);
-
-    // useEffect(() => {
-    //     const getUserData = async () => {
-    //         const response = await axios.get('https://reqres.in/api/users');
-    //         console.log(response);
-    //         setUserInfo(Object.entries(response.data.data));
-    //     };
-    //     getUserData();
-    // }, [])
     useEffect(() => {
         dispatch(userActions.getAll());
     }, []);
 
     console.log(users.items);
+    console.log(users.new_items);
 
     function handleDeleteUser(id) {
-        dispatch(userActions.delete(id));
+        if (window.confirm('Are you sure you wish to delete this user?'))
+            dispatch(userActions.delete(id));
     }
 
     return <div>
@@ -53,8 +44,10 @@ function Users () {
                         <thead>
                             <tr>
                                 <th scope="col">Name</th>
+                                <th scope="col">Username</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Profile</th>
+                                <th scope="col">Phone</th>
                                 <th scope="col">Created Date</th>
                                 <th scope="col">Action</th>
                             </tr>
@@ -62,11 +55,18 @@ function Users () {
                         <tbody>
                             {users.items && users.items.map((user) => (
                                 <tr key={user[1].id}>
-                                    <th scope="row">{user[1].first_name +' '+ user[1].last_name}</th>
+                                    <th scope="row">{user[1].name ? user[1].name :
+                                    user[1].first_name +' '+ user[1].last_name
+                                    }</th>
+                                    <td>{user[1].username ? user[1].username : user[1].email}</td>
                                     <td>{user[1].email}</td>
-                                    <td><img src={user[1].avatar}></img></td>
-                                    <td></td>
-                                    <td>Edit {
+                                    <td>{user[1].avatar ? <img src={user[1].avatar}></img> : '👤'}</td>
+                                    {/* <td><img src={user[1].avatar?}></img></td> */}
+                                    <td>{(user[1].phone)? user[1].phone : ''}</td>
+                                    <td>{(user[1].createdAt)? user[1].createdAt : ''}</td>
+                                    <td>
+                                        <Link to={"/edit/"+user[1].id}>Edit</Link> 
+                                    {
                                         user.deleting ? <em> - Deleting...</em>
                                         : user.deleteError ? <span className="text-danger"> - ERROR: {user.deleteError}</span>
                                         : <span> - <a onClick={() => handleDeleteUser(user[1].id)} className="text-primary">Delete</a></span>

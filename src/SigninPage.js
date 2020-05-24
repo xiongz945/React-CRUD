@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { history } from './history';
 
 import { userActions } from './user.actions'
 

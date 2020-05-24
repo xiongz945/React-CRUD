@@ -4,16 +4,54 @@ export function users(state = {}, action) {
   switch (action.type) {
     case userConstants.GETALL_REQUEST:
       return {
+        ...state,
         loading: true
       };
     case userConstants.GETALL_SUCCESS:
-      return {
-        items: action.users
-      };
+      console.log(state);
+      if (state.new_items) {  
+        return {
+          ...state,
+          loading: false,
+          items: action.users.concat(state.new_items)
+          };
+      }
+      else {
+        return {
+          ...state,
+          loading: false,
+          items: action.users
+          };
+      }
     case userConstants.GETALL_FAILURE:
       return { 
         error: action.error
       };
+
+    case userConstants.CREATE_REQUEST:
+      return { ...state,
+        registering: true };
+
+    case userConstants.CREATE_SUCCESS:
+      { 
+        const user = [];
+        user.push([0,action.user]);
+        console.log(state);
+        if (state.new_items) {
+        return { ...state,
+          registering: false,
+          new_items: state.new_items.concat(user) };
+        }
+        else {
+          return { ...state,
+            registering: false,
+            new_items: user };
+        }
+        
+      }
+    case userConstants.CREATE_FAILURE:
+      return {};
+
     case userConstants.DELETE_REQUEST:
       // add 'deleting:true' property to user being deleted
       return {

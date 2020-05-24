@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
-    BrowserRouter as Router,
+    Router,
     Switch,
     Redirect,
     Route
@@ -10,6 +10,7 @@ import { Users } from './Users'
 import { SigninPage } from './SigninPage'
 import { AddUser } from './AddUser'
 import { history } from './history'
+import { UpdateUser } from './UpdateUser';
 
 // class App extends React.Component {
 //     render() {
@@ -56,6 +57,10 @@ import { history } from './history'
 // }
 
 function App() {
+    useEffect(() => {
+        history.listen(() => {
+        });
+    }, []);
     return (
                     <Router history={history}>
                         <Switch>
@@ -64,6 +69,8 @@ function App() {
                             <Route exact path='/signin' component={SigninPage}>
                             </Route>
                             <PrivateRoute exact path='/add' component={AddUser}>
+                            </PrivateRoute>
+                            <PrivateRoute path='/edit/:id' component={UpdateUser}>
                             </PrivateRoute>
                             <Redirect from="*" to="/signin" />
                         </Switch>

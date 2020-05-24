@@ -6,6 +6,8 @@ import { history } from './history';
 export const userActions = {
     login,
     logout,
+    create,
+    update,
     getAll,
     delete: _delete
 };
@@ -20,8 +22,6 @@ function login(email, password) {
                     // console.log(user);
                     dispatch(success(user));
                     history.push('/users');
-                    window.location.reload(false);
-
                 },
                 error => {
                     dispatch(failure(error.toString()));
@@ -59,6 +59,52 @@ function getAll() {
     function failure(error) { return { type: userConstants.GETALL_FAILURE, error } }
 }
 
+function create(user) {
+    return dispatch => {
+        dispatch(request(user));
+
+        userService.create(user)
+            .then(
+                user => { 
+                    // console.log(user);
+                    dispatch(success(user.data));
+                    history.push('/users');
+                    // window.location.reload(false);
+
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                }
+            );
+    };
+
+    function request(user) { return { type: userConstants.CREATE_REQUEST, user } }
+    function success(user) { return { type: userConstants.CREATE_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.CREATE_FAILURE, error } }
+}
+
+function update(user) {
+    return dispatch => {
+        dispatch(request(user));
+
+        userService.create(user)
+            .then(
+                user => { 
+                    // console.log(user);
+                    dispatch(success(user.data));
+                    history.push('/users');
+
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                }
+            );
+    };
+
+    function request(user) { return { type: userConstants.UPDATE_REQUEST, user } }
+    function success(user) { return { type: userConstants.UPDATE_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.UPDATE_FAILURE, error } }
+}
 // prefixed function name with underscore because delete is a reserved word in javascript
 function _delete(id) {
     return dispatch => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -6,13 +6,14 @@ import { userActions } from './user.actions';
 
 function AddUser() {
     const [user, setUser] = useState({
-        firstName: '',
-        lastName: '',
+        name: '',
+        email: '',
         username: '',
         phone: ''
     });
     const [submitted, setSubmitted] = useState(false);
-    // const registering = useSelector(state => state.registration.registering);
+    // const users = useSelector(state => state.users);
+    const registering = useSelector(state => state.users.registering);
     const dispatch = useDispatch();
 
     function handleChange(e) {
@@ -24,19 +25,19 @@ function AddUser() {
         e.preventDefault();
 
         setSubmitted(true);
-        if (user.firstName && user.lastName && user.username && user.password) {
-            dispatch(userActions.register(user));
+        if (user.phone && user.name && user.username && user.email) {
+            dispatch(userActions.create(user));
         }
     }
 
     return (
         <div className="col-lg-8 offset-lg-2">
-            <h2>Register</h2>
+            <h2>Add a new user</h2>
             <form name="form" onSubmit={handleSubmit}>
                 <div className="form-group">
                     <label>Name</label>
-                    <input type="text" name="firstName" value={user.firstName} onChange={handleChange} className={'form-control' + (submitted && !user.firstName ? ' is-invalid' : '')} />
-                    {submitted && !user.firstName &&
+                    <input type="text" name="name" value={user.name} onChange={handleChange} className={'form-control' + (submitted && !user.name ? ' is-invalid' : '')} />
+                    {submitted && !user.name &&
                         <div className="invalid-feedback">Name is required</div>
                     }
                 </div>
@@ -49,21 +50,21 @@ function AddUser() {
                 </div>
                 <div className="form-group">
                     <label>Email</label>
-                    <input type="text" name="email" value={user.password} onChange={handleChange} className={'form-control' + (submitted && !user.password ? ' is-invalid' : '')} />
-                    {submitted && !user.password &&
+                    <input type="text" name="email" value={user.email} onChange={handleChange} className={'form-control' + (submitted && !user.email ? ' is-invalid' : '')} />
+                    {submitted && !user.email &&
                         <div className="invalid-feedback">Email is required</div>
                     }
                 </div>
                 <div className="form-group">
                     <label>Phone</label>
-                    <input type="text" name="phone" value={user.lastName} onChange={handleChange} className={'form-control' + (submitted && !user.lastName ? ' is-invalid' : '')} />
-                    {submitted && !user.lastName &&
+                    <input type="text" name="phone" value={user.phone} onChange={handleChange} className={'form-control' + (submitted && !user.phone ? ' is-invalid' : '')} />
+                    {submitted && !user.phone &&
                         <div className="invalid-feedback">Phone is required</div>
                     }
                 </div>
                 <div className="form-group">
                     <button className="btn btn-primary">
-                        {/* {registering && <span className="spinner-border spinner-border-sm mr-1"></span>} */}
+                        {registering && <span className="spinner-border spinner-border-sm mr-1"></span>}
                         Add
                     </button>
                     <Link to="/users" className="btn btn-link">Cancel</Link>
