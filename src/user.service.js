@@ -21,14 +21,6 @@ function login(email, password) {
             console.log(err);
             throw err;
         });
-    // return fetch(`${config.apiUrl}/users/authenticate`, requestOptions)
-    //     .then(handleResponse)
-    //     .then(user => {
-    //         // store user details and jwt token in local storage to keep user logged in between page refreshes
-    //         localStorage.setItem('user', JSON.stringify(user));
-
-    //         return user;
-    //     });
 }
 
 function logout() {
@@ -50,7 +42,6 @@ function create(user) {
         "email": user.email,
         "phone": user.phone
     }).then(user => {
-        // localStorage.setItem('user', JSON.stringify(user));
         return user;
     }).catch(err => {
         console.log(err);
@@ -59,8 +50,19 @@ function create(user) {
 }
 
 function update(user) {
-
-    // return fetch(`${config.apiUrl}/users/${user.id}`, requestOptions).then(handleResponse);;
+    return axios.put('https://reqres.in/api/users', {
+        "name": user.name,
+        "username": user.username,
+        "email": user.email,
+        "phone": user.phone,
+        "id": parseInt(user.id),
+        "createdAt": user.createdAt
+    }).then(user => {
+        return user;
+    }).catch(err => {
+        console.log(err);
+        throw err;
+    });
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript

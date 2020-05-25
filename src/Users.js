@@ -11,8 +11,8 @@ function Users () {
         dispatch(userActions.getAll());
     }, []);
 
-    console.log(users.items);
-    console.log(users.new_items);
+    // console.log(users.items);
+    // console.log(users.new_items);
 
     function handleDeleteUser(id) {
         if (window.confirm('Are you sure you wish to delete this user?'))
@@ -46,7 +46,6 @@ function Users () {
                                 <th scope="col">Name</th>
                                 <th scope="col">Username</th>
                                 <th scope="col">Email</th>
-                                <th scope="col">Profile</th>
                                 <th scope="col">Phone</th>
                                 <th scope="col">Created Date</th>
                                 <th scope="col">Action</th>
@@ -60,8 +59,6 @@ function Users () {
                                     }</th>
                                     <td>{user[1].username ? user[1].username : user[1].email}</td>
                                     <td>{user[1].email}</td>
-                                    <td>{user[1].avatar ? <img src={user[1].avatar}></img> : '👤'}</td>
-                                    {/* <td><img src={user[1].avatar?}></img></td> */}
                                     <td>{(user[1].phone)? user[1].phone : ''}</td>
                                     <td>{(user[1].createdAt)? user[1].createdAt : ''}</td>
                                     <td>

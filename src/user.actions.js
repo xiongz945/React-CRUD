@@ -87,10 +87,9 @@ function update(user) {
     return dispatch => {
         dispatch(request(user));
 
-        userService.create(user)
+        userService.update(user)
             .then(
                 user => { 
-                    // console.log(user);
                     dispatch(success(user.data));
                     history.push('/users');
 

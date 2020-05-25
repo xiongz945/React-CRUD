@@ -8,21 +8,16 @@ export function users(state = {}, action) {
         loading: true
       };
     case userConstants.GETALL_SUCCESS:
+    {  
+      const users_list = state.items || action.users ;
       console.log(state);
-      if (state.new_items) {  
         return {
           ...state,
           loading: false,
-          items: action.users.concat(state.new_items)
+          updated: false,
+          items: users_list,
           };
-      }
-      else {
-        return {
-          ...state,
-          loading: false,
-          items: action.users
-          };
-      }
+    }
     case userConstants.GETALL_FAILURE:
       return { 
         error: action.error
@@ -34,26 +29,46 @@ export function users(state = {}, action) {
 
     case userConstants.CREATE_SUCCESS:
       { 
-        const user = [];
-        user.push([0,action.user]);
-        console.log(state);
-        if (state.new_items) {
+        const user = [0];
+        user.push(action.user);
+        console.log(state.items);
+        if (state.items) {
         return { ...state,
           registering: false,
-          new_items: state.new_items.concat(user) };
+          items: state.items.concat([user])
+         };
         }
         else {
           return { ...state,
             registering: false,
-            new_items: user };
+            items: [user] };
         }
         
       }
     case userConstants.CREATE_FAILURE:
       return {};
 
+    case userConstants.UPDATE_REQUEST:
+      return { ...state,
+        updating: true };
+
+    case userConstants.UPDATE_SUCCESS:
+      { 
+        const edited_user = [0];
+        edited_user.push(action.user);
+        return { ...state,
+          updating: false,
+          updated: true,
+          items: state.items.map(user =>
+            parseInt(user[1].id) === action.user.id
+              ? edited_user
+              : user )};  
+      }
+
+    case userConstants.UPDATE_FAILURE:
+      return {};
+    
     case userConstants.DELETE_REQUEST:
-      // add 'deleting:true' property to user being deleted
       return {
         ...state,
         items: state.items.map(user =>

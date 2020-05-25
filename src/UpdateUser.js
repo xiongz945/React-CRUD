@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useParams, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { userActions } from './user.actions';
@@ -7,15 +7,36 @@ import { userActions } from './user.actions';
 function UpdateUser() {
     const { id } = useParams();
     const users = useSelector(state => state.users)
-    console.log(users)
+    let edit_user;
+    let history = useHistory()
+    if (users.items) {
+        users.items.forEach(user => {
+            if (parseInt(user[1].id) === parseInt(id)) {
+                edit_user = user;
+            }
+        });
+    }
+    if (!edit_user) {
+        edit_user = [0, {
+            name:' ',
+            email:'',
+            username:'',
+            phone:'',
+            createdAt:''
+        }]
+        history.push('/users')
+    }
+
     const [user, setUser] = useState({
-        name: '',
-        email: '',
-        username: '',
-        phone: ''
+        name: edit_user[1].name?edit_user[1].name:(edit_user[1].first_name+' '+edit_user[1].last_name),
+        email: edit_user[1].email,
+        username: edit_user[1].username?edit_user[1].username:edit_user[1].email,
+        phone: edit_user[1].phone,
+        id: id,
+        createdAt: edit_user[1].createdAt || ''
     });
     const [submitted, setSubmitted] = useState(false);
-    const registering = useSelector(state => state.users.registering);
+    const updating = useSelector(state => state.users.updating);
     const dispatch = useDispatch();
 
     function handleChange(e) {
@@ -66,8 +87,8 @@ function UpdateUser() {
                 </div>
                 <div className="form-group">
                     <button className="btn btn-primary">
-                        {registering && <span className="spinner-border spinner-border-sm mr-1"></span>}
-                        Add
+                        {updating && <span className="spinner-border spinner-border-sm mr-1"></span>}
+                        Update
                     </button>
                     <Link to="/users" className="btn btn-link">Cancel</Link>
                 </div>
