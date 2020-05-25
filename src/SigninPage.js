@@ -46,6 +46,9 @@ function SigninPage () {
                         </button>
                     </div>
                 </form>
+                <div>
+                    <h3>Please use Email: 'eve.holt@reqres.in' and Password: 'cityslicka' to sign in.</h3>
+                </div>
             </div>
 }
 
