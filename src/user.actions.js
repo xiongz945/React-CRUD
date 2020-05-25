@@ -9,6 +9,7 @@ export const userActions = {
     create,
     update,
     getAll,
+    search,
     delete: _delete
 };
 
@@ -119,4 +120,10 @@ function _delete(id) {
     function request(id) { return { type: userConstants.DELETE_REQUEST, id } }
     function success(id) { return { type: userConstants.DELETE_SUCCESS, id } }
     function failure(id, error) { return { type: userConstants.DELETE_FAILURE, id, error } }
+}
+
+function search(result) {
+    return dispatch => dispatch(success(result));
+
+    function success(result) { return { type: userConstants.SEARCH_SUCCESS, result}};
 }

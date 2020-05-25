@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { userActions } from './user.actions';
 
@@ -6,18 +6,20 @@ import {Link} from 'react-router-dom'
 
 function Users () {
     const users = useSelector(state => state.users);
+    const results = users.search_results;
+    console.log("results in app",results);
+    const isSearch = users.isSearch;
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(userActions.getAll());
     }, []);
 
-    // console.log(users.items);
-    // console.log(users.new_items);
-
     function handleDeleteUser(id) {
         if (window.confirm('Are you sure you wish to delete this user?'))
             dispatch(userActions.delete(id));
     }
+
+    const display_list = isSearch ? results : users.items;
 
     return <div>
             <div className="container">
@@ -51,8 +53,28 @@ function Users () {
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
+                        {/* <tbody>
+                            { users.items && users.items.map((user) => (
+                                <tr key={user[1].id}>
+                                    <th scope="row">{user[1].name ? user[1].name :
+                                    user[1].first_name +' '+ user[1].last_name
+                                    }</th>
+                                    <td>{user[1].username ? user[1].username : user[1].email}</td>
+                                    <td>{user[1].email}</td>
+                                    <td>{(user[1].phone)? user[1].phone : ''}</td>
+                                    <td>{(user[1].createdAt)? user[1].createdAt : ''}</td>
+                                    <td>
+                                        <Link to={"/edit/"+user[1].id}>Edit</Link> 
+                                    {
+                                        user.deleting ? <em> - Deleting...</em>
+                                        : user.deleteError ? <span className="text-danger"> - ERROR: {user.deleteError}</span>
+                                        : <span> - <a onClick={() => handleDeleteUser(user[1].id)} className="text-primary">Delete</a></span>
+                                    }</td>
+                                </tr> 
+                            ))}
+                        </tbody> */}
                         <tbody>
-                            {users.items && users.items.map((user) => (
+                            { display_list && display_list.map((user) => (
                                 <tr key={user[1].id}>
                                     <th scope="row">{user[1].name ? user[1].name :
                                     user[1].first_name +' '+ user[1].last_name
@@ -79,8 +101,29 @@ function Users () {
 
 
 function Search() {
-    return <div className="searchBox">
-                <input type="text" style={{width:'90%', margin:30}} placeholder="Type in keywords to filter"/>
-            </div>;
+    const [input, setInput] = useState('');
+    const [isSearch, setIsSearch] = useState(false);
+    const dispatch = useDispatch();
+    const user_list = useSelector(state => state.users)
+    function handleChange(e) {
+        setInput(e.target.value);
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        const searchTerm = input.toLowerCase();
+        const results = user_list.items ? user_list.items.filter(user => {
+            return Object.keys(user[1]).some(key =>
+                (user[1][key]).toString().toLowerCase().includes(searchTerm));
+        }) : '';
+        console.log(results);
+        dispatch(userActions.search(results));
+
+    };
+    
+    return <form onSubmit={handleSubmit}>
+            <div className="searchBox">
+                <input type="text" style={{width:'90%', margin:30}} placeholder="Type in keywords and press enter to search" onChange={handleChange} value={input}/>
+            </div></form>;
 }
 export { Users }

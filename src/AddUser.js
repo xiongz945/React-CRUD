@@ -12,7 +12,6 @@ function AddUser() {
         phone: ''
     });
     const [submitted, setSubmitted] = useState(false);
-    // const users = useSelector(state => state.users);
     const registering = useSelector(state => state.users.registering);
     const dispatch = useDispatch();
 

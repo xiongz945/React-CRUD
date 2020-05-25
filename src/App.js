@@ -13,10 +13,7 @@ import { history } from './history'
 import { UpdateUser } from './UpdateUser';
 
 function App() {
-    useEffect(() => {
-        history.listen(() => {
-        });
-    }, []);
+
     return (
                     <Router history={history}>
                         <Switch>

@@ -16,37 +16,12 @@ function SigninPage () {
         setSubmitted(true);
         if (email && password) {
             dispatch(userActions.login(email, password));
-            // history.push('/users');
         }
-        // axios.post('https://reqres.in/api/login', {
-        //     "email": email,
-        //     "password": password
-        // })
-        // .then((res) => {
-        //     console.log(res);
-        //     history.push('/users')
-        // })
-        // .catch((err) => {
-        //     console.log(err);
-        // });
     }
     // reset login status
     useEffect(() => { 
         dispatch(userActions.logout());
     }, []);
-
-    // return <form className="form-signin" onSubmit={signIn}>
-    //         <h2 className="form-signin-heading"> Please sign in </h2>
-    //         <label htmlFor="inputEmail" className="sr-only"> Email address
-    //         </label>
-    //         <input type="email" id="inputEmail" onChange={(e)=> setEmail(e.target.value)} className="form-control" placeholder="Email address" required autoFocus />
-    //         <label htmlFor="inputPassword" className="sr-only"> Password</label>
-    //         <input type="password" id="inputPassword" onChange={(e)=> setPassword(e.target.value)} className="form-control" placeholder="Password" required />
-    //         <button className="btn btn-lg btn-primary btn-block" type="button"> 
-    //         {loggingIn && <span className="spinner-border spinner-border-sm mr-1"></span>}
-    //         Sign in
-    //         </button>
-    //     </form>
     return <div className="col-lg-8 offset-lg-2">
                 <h2>Please sign in first</h2>
                 <form name="form" onSubmit={signIn}>

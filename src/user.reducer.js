@@ -13,6 +13,7 @@ export function users(state = {}, action) {
       console.log(state);
         return {
           ...state,
+          isSearch: false,
           loading: false,
           updated: false,
           items: users_list,
@@ -34,12 +35,14 @@ export function users(state = {}, action) {
         console.log(state.items);
         if (state.items) {
         return { ...state,
+          isSearch: false,
           registering: false,
           items: state.items.concat([user])
          };
         }
         else {
           return { ...state,
+            isSearch: false,
             registering: false,
             items: [user] };
         }
@@ -57,6 +60,7 @@ export function users(state = {}, action) {
         const edited_user = [0];
         edited_user.push(action.user);
         return { ...state,
+          isSearch: false,
           updating: false,
           updated: true,
           items: state.items.map(user =>
@@ -87,7 +91,7 @@ export function users(state = {}, action) {
       return {
         ...state,
         items: state.items.map(user => {
-          if (user.id === action.id) {
+          if (user[1].id === action.id) {
             // make copy of user without 'deleting:true' property
             const { deleting, ...userCopy } = user;
             // return copy of user with 'deleteError:[error]' property
@@ -97,6 +101,14 @@ export function users(state = {}, action) {
           return user;
         })
       };
+
+    case userConstants.SEARCH_SUCCESS:
+      console.log(state);
+      return {
+        ...state,
+        isSearch: true,
+        search_results: action.result
+      }
     default:
       return state
   }
